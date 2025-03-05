@@ -47,6 +47,28 @@ export const getAllProducts = async (req, res) => {
 };
 
 
+export const getProductsByCategory = async (req, res) => {
+    try {
+        const { category } = req.params;
+        console.log("Category received:", category);  // 🛠 Debugging log
+
+        let products;
+        if (category === "Best Sellers" || category === "New Arrivals") {
+            products = await Product.find(); // Fetch all products
+        } else {
+            products = await Product.find({ category }); // Fetch products by category
+        }
+
+        console.log("Products fetched:", products); // 🛠 Debugging log
+        res.status(200).json(products);
+    } catch (error) {
+        console.error("Error fetching products:", error);  // 🛠 Debugging log
+        res.status(500).json({ message: "Error fetching products", error });
+    }
+};
+
+
+
 
 export const getProductById = async (req, res) => {
     try {

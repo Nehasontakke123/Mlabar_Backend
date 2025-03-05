@@ -6,7 +6,8 @@ import {
     getAllProducts, 
     getProductById, 
     updateProduct, 
-    deleteProduct 
+    deleteProduct,
+    getProductsByCategory
 } from "../controllers/productController.js";
 
 const router = express.Router();
@@ -28,5 +29,6 @@ router.get("/", getAllProducts);
 router.get("/:id", getProductById);
 router.put("/:id", upload.array("images", 5), updateProduct);
 router.delete("/:id", deleteProduct);
+router.get("/:category", getProductsByCategory);
 
 export default router;
