@@ -30,6 +30,24 @@ export const createProduct = async (req, res) => {
 // };
 
 
+// export const getAllProducts = async (req, res) => {
+//     try {
+//         const { category } = req.query;  // Get category from query params
+//         let query = {};
+
+//         if (category) {
+//             query.category = category; // Filter by category
+//         }
+
+//         const products = await Product.find(query);
+//         res.status(200).json(products);
+//     } catch (error) {
+//         res.status(500).json({ message: "Error fetching products", error });
+//     }
+// };
+
+
+
 export const getAllProducts = async (req, res) => {
     try {
         const { category } = req.query;  // Get category from query params
@@ -40,11 +58,14 @@ export const getAllProducts = async (req, res) => {
         }
 
         const products = await Product.find(query);
+        console.log("✅ Products fetched successfully:", products); // Debug Log
         res.status(200).json(products);
     } catch (error) {
-        res.status(500).json({ message: "Error fetching products", error });
+        console.error("❌ Error fetching products:", error);  // Debugging Error Log
+        res.status(500).json({ message: "Error fetching products", error: error.message });
     }
 };
+
 
 
 export const getProductsByCategory = async (req, res) => {
