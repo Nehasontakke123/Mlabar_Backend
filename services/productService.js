@@ -1,4 +1,4 @@
-import Product from '../models/productsModel.js';  // Product Model Import केला
+import Product from '../models/productsModel.js';  // Product Model Import 
 
 export const createProduct = async (productData) => {
     return await Product.create(productData);
