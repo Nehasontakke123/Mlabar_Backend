@@ -107,19 +107,27 @@ export const updateProduct = async (req, res) => {
         // 🚨 `productCode` बदलू नको, जुनाच ठेवा
         req.body.productCode = existingProduct.productCode;
 
+        // 🛠 Debug Logs (Check request body)
+        console.log("Incoming Data:", req.body);
+        console.log("Existing Product:", existingProduct);
+
         // 📂 Images update करायच्या असतील, तर नवीन images घ्या
         if (req.files && req.files.length > 0) {
             req.body.images = req.files.map((file) => file.path); // New images paths
+            console.log("New Images:", req.body.images);
         } else {
             req.body.images = existingProduct.images; // जुन्या images ठेवा
+            console.log("Keeping Old Images:", req.body.images);
         }
 
         // 🔄 Product update कर
         const updatedProduct = await Product.findByIdAndUpdate(id, req.body, { new: true });
 
+        console.log("Updated Product:", updatedProduct);
         res.status(200).json({ success: true, data: updatedProduct });
     } catch (error) {
-        res.status(500).json({ success: false, message: "Server Error", error });
+        console.error("Error while updating product:", error);
+        res.status(500).json({ success: false, message: "Server Error", error: error.message });
     }
 };
 
