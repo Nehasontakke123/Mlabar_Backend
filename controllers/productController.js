@@ -1,5 +1,7 @@
+import mongoose from "mongoose";
 import * as productService from "../services/productService.js";
 import Product from "../models/productsModel.js";
+
 
 
 export const createProduct = async (req, res) => {
