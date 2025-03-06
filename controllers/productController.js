@@ -22,31 +22,7 @@ export const createProduct = async (req, res) => {
     }
 };
 
-// export const getAllProducts = async (req, res) => {
-//     try {
-//         const products = await productService.getAllProducts();
-//         res.status(200).json({ success: true, data: products });
-//     } catch (error) {
-//         res.status(500).json({ success: false, message: error.message });
-//     }
-// };
 
-
-// export const getAllProducts = async (req, res) => {
-//     try {
-//         const { category } = req.query;  // Get category from query params
-//         let query = {};
-
-//         if (category) {
-//             query.category = category; // Filter by category
-//         }
-
-//         const products = await Product.find(query);
-//         res.status(200).json(products);
-//     } catch (error) {
-//         res.status(500).json({ message: "Error fetching products", error });
-//     }
-// };
 
 
 
@@ -70,22 +46,39 @@ export const getAllProducts = async (req, res) => {
 
 
 
+// export const getProductsByCategory = async (req, res) => {
+//     try {
+//         const { category } = req.params;
+//         console.log("🔹 Category received:", category);  // ✅ Debugging Log
+
+//         let products;
+//         if (category === "Best Sellers" || category === "New Arrivals") {
+//             products = await Product.find(); // Fetch all products
+//         } else {
+//             products = await Product.find({ category }); // Fetch products by category
+//         }
+
+//         console.log("✅ Products fetched:", products);  // ✅ Debugging Log
+//         res.status(200).json(products);
+//     } catch (error) {
+//         console.error("❌ Error fetching products:", error.message);  // ✅ Print exact error
+//         res.status(500).json({ message: "Error fetching products", error: error.message });
+//     }
+// };
+
+
+
 export const getProductsByCategory = async (req, res) => {
     try {
         const { category } = req.params;
-        console.log("🔹 Category received:", category);  // ✅ Debugging Log
+        console.log("🔹 Category received:", category);
 
-        let products;
-        if (category === "Best Sellers" || category === "New Arrivals") {
-            products = await Product.find(); // Fetch all products
-        } else {
-            products = await Product.find({ category }); // Fetch products by category
-        }
-
-        console.log("✅ Products fetched:", products);  // ✅ Debugging Log
+        const products = await Product.find({ category });
+        
+        console.log("✅ Products fetched:", products);
         res.status(200).json(products);
     } catch (error) {
-        console.error("❌ Error fetching products:", error.message);  // ✅ Print exact error
+        console.error("❌ Error fetching products:", error.message);
         res.status(500).json({ message: "Error fetching products", error: error.message });
     }
 };
