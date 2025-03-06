@@ -46,27 +46,6 @@ export const getAllProducts = async (req, res) => {
 
 
 
-// export const getProductsByCategory = async (req, res) => {
-//     try {
-//         const { category } = req.params;
-//         console.log("🔹 Category received:", category);  // ✅ Debugging Log
-
-//         let products;
-//         if (category === "Best Sellers" || category === "New Arrivals") {
-//             products = await Product.find(); // Fetch all products
-//         } else {
-//             products = await Product.find({ category }); // Fetch products by category
-//         }
-
-//         console.log("✅ Products fetched:", products);  // ✅ Debugging Log
-//         res.status(200).json(products);
-//     } catch (error) {
-//         console.error("❌ Error fetching products:", error.message);  // ✅ Print exact error
-//         res.status(500).json({ message: "Error fetching products", error: error.message });
-//     }
-// };
-
-
 
 export const getProductsByCategory = async (req, res) => {
     try {
@@ -98,17 +77,54 @@ export const getProductById = async (req, res) => {
     }
 };
 
+// export const updateProduct = async (req, res) => {
+//     try {
+//         const updatedProduct = await productService.updateProduct(req.params.id, req.body);
+//         if (!updatedProduct) {
+//             return res.status(404).json({ success: false, message: "Product not found" });
+//         }
+//         res.status(200).json({ success: true, data: updatedProduct });
+//     } catch (error) {
+//         res.status(500).json({ success: false, message: error.message });
+//     }
+// };
+
+
 export const updateProduct = async (req, res) => {
     try {
-        const updatedProduct = await productService.updateProduct(req.params.id, req.body);
-        if (!updatedProduct) {
+        const { id } = req.params;
+
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ success: false, message: "Invalid Product ID" });
+        }
+
+        // 🔍 Existing product शोध
+        const existingProduct = await Product.findById(id);
+        if (!existingProduct) {
             return res.status(404).json({ success: false, message: "Product not found" });
         }
+
+        // 🚨 `productCode` बदलू नको, जुनाच ठेवा
+        req.body.productCode = existingProduct.productCode;
+
+        // 📂 Images update करायच्या असतील, तर नवीन images घ्या
+        if (req.files && req.files.length > 0) {
+            req.body.images = req.files.map((file) => file.path); // New images paths
+        } else {
+            req.body.images = existingProduct.images; // जुन्या images ठेवा
+        }
+
+        // 🔄 Product update कर
+        const updatedProduct = await Product.findByIdAndUpdate(id, req.body, { new: true });
+
         res.status(200).json({ success: true, data: updatedProduct });
     } catch (error) {
-        res.status(500).json({ success: false, message: error.message });
+        res.status(500).json({ success: false, message: "Server Error", error });
     }
 };
+
+
+
 
 export const deleteProduct = async (req, res) => {
     try {
