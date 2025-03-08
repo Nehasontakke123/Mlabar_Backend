@@ -1,6 +1,6 @@
-// import mongoose from "mongoose";
-// import * as productService from "../services/productService.js";
-// import Product from "../models/productsModel.js";
+import mongoose from "mongoose";
+import * as productService from "../services/productService.js";
+import Product from "../models/productsModel.js";
 
 
 
@@ -173,16 +173,34 @@ export const createProduct = async (req, res) => {
     }
 };
 
+// export const getAllProducts = async (req, res) => {
+//     try {
+//         const { category } = req.query;
+//         const query = category ? { category } : {};
+//         const products = await Product.find(query);
+//         res.status(200).json(products);
+//     } catch (error) {
+//         res.status(500).json({ message: "Error fetching products" });
+//     }
+// };
+
+
+
 export const getAllProducts = async (req, res) => {
     try {
-        const { category } = req.query;
-        const query = category ? { category } : {};
-        const products = await Product.find(query);
+        console.log("Fetching products..."); // 👈 Debug log
+        const products = await Product.find();
+        console.log("Products Fetched:", products); // 👈 Data print करायला हे टाक
+
         res.status(200).json(products);
     } catch (error) {
+        console.error("Error fetching products:", error);
         res.status(500).json({ message: "Error fetching products" });
     }
 };
+
+
+
 
 export const updateProduct = async (req, res) => {
     try {
