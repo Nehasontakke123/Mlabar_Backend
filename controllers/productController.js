@@ -92,6 +92,55 @@ export const getProductById = async (req, res) => {
 // };
 
 
+// export const updateProduct = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+
+//         if (!mongoose.Types.ObjectId.isValid(id)) {
+//             return res.status(400).json({ success: false, message: "Invalid Product ID" });
+//         }
+
+//         // 🔍 Existing product 
+//         const existingProduct = await Product.findById(id);
+//         if (!existingProduct) {
+//             return res.status(404).json({ success: false, message: "Product not found" });
+//         }
+
+//         // 🚨 `productCode`
+//         req.body.productCode = existingProduct.productCode;
+
+//         // 🛠 Debug Logs (Check request body)
+//         console.log("Incoming Data:", req.body);
+//         console.log("Existing Product:", existingProduct);
+
+       
+//         if (req.files && req.files.length > 0) {
+//             req.body.images = req.files.map((file) => file.path); 
+//             console.log("New Images:", req.body.images);
+//         } else {
+//             req.body.images = existingProduct.images; 
+//             console.log("Keeping Old Images:", req.body.images);
+//         }
+
+//         // 🔄 Product update 
+//         const updatedProduct = await Product.findByIdAndUpdate(id, req.body, { new: true });
+
+//         console.log("Updated Product:", updatedProduct);
+//         res.status(200).json({ success: true, data: updatedProduct });
+//     } catch (error) {
+//         console.error("Error while updating product:", error);
+//         res.status(500).json({ success: false, message: "Server Error", error: error.message });
+//     }
+// };
+
+
+
+
+
+
+
+
+
 export const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
@@ -100,38 +149,47 @@ export const updateProduct = async (req, res) => {
             return res.status(400).json({ success: false, message: "Invalid Product ID" });
         }
 
-        // 🔍 Existing product शोध
+        // 🔍 Existing product search
         const existingProduct = await Product.findById(id);
         if (!existingProduct) {
             return res.status(404).json({ success: false, message: "Product not found" });
         }
 
-        // 🚨 `productCode` बदलू नको, जुनाच ठेवा
+        // 🚨 Keep old `productCode`
         req.body.productCode = existingProduct.productCode;
 
-        // 🛠 Debug Logs (Check request body)
-        console.log("Incoming Data:", req.body);
-        console.log("Existing Product:", existingProduct);
-
-        // 📂 Images update करायच्या असतील, तर नवीन images घ्या
+        // 🖼️ Image Update Logic
         if (req.files && req.files.length > 0) {
-            req.body.images = req.files.map((file) => file.path); // New images paths
-            console.log("New Images:", req.body.images);
+            // If new images are uploaded, replace old images
+            req.body.images = req.files.map((file) => file.path);
+            console.log("📸 New Images:", req.body.images);
         } else {
-            req.body.images = existingProduct.images; // जुन्या images ठेवा
-            console.log("Keeping Old Images:", req.body.images);
+            // If no new images uploaded, keep old images
+            req.body.images = existingProduct.images;
+            console.log("📎 Keeping Old Images:", req.body.images);
         }
 
-        // 🔄 Product update कर
-        const updatedProduct = await Product.findByIdAndUpdate(id, req.body, { new: true });
+        // 🔄 Update product in database
+        const updatedProduct = await Product.findByIdAndUpdate(
+            id,
+            { $set: req.body }, // Update only provided fields
+            { new: true } // Return updated document
+        );
 
-        console.log("Updated Product:", updatedProduct);
+        console.log("✅ Updated Product:", updatedProduct);
         res.status(200).json({ success: true, data: updatedProduct });
     } catch (error) {
-        console.error("Error while updating product:", error);
+        console.error("❌ Error while updating product:", error);
         res.status(500).json({ success: false, message: "Server Error", error: error.message });
     }
 };
+
+
+
+
+
+
+
 
 
 
