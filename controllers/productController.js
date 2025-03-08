@@ -235,8 +235,8 @@ export const updateProduct = async (req, res) => {
             return res.status(404).json({ success: false, message: "Product not found" });
         }
 
-        // Check if productCode already exists
-        if (updateData.productCode) {
+        // **Allow productCode update only if it's different**
+        if (updateData.productCode && updateData.productCode !== existingProduct.productCode) {
             const duplicateProduct = await Product.findOne({ productCode: updateData.productCode, _id: { $ne: id } });
             if (duplicateProduct) {
                 return res.status(400).json({ success: false, message: "Product Code already exists!" });
