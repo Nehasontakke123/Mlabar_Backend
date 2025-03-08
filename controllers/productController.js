@@ -229,11 +229,22 @@ export const updateProduct = async (req, res) => {
         const { id } = req.params;
         const updateData = req.body;
 
-        const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true });
-
-        if (!updatedProduct) {
+        // Check if product exists
+        const existingProduct = await Product.findById(id);
+        if (!existingProduct) {
             return res.status(404).json({ success: false, message: "Product not found" });
         }
+
+        // Check if productCode already exists
+        if (updateData.productCode) {
+            const duplicateProduct = await Product.findOne({ productCode: updateData.productCode, _id: { $ne: id } });
+            if (duplicateProduct) {
+                return res.status(400).json({ success: false, message: "Product Code already exists!" });
+            }
+        }
+
+        // Update product
+        const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true });
 
         res.status(200).json({ success: true, message: "Product updated successfully", data: updatedProduct });
     } catch (error) {

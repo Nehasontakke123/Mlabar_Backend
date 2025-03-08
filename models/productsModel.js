@@ -2,7 +2,7 @@ import mongoose from "mongoose";
 
 const productSchema = new mongoose.Schema({
     name: { type: String, required: true },
-    productCode: { type: String, required: true, unique: true },
+    productCode: { type: String},
     category: { type: String, required: true, enum: [
         "Best Sellers", "New Arrivals", "Coins & Bars", "Coin Pendants", 
         "Silver Coins", "Gold Jhumka", "Rings", "Bangles", "Earrings", 
