@@ -38,7 +38,7 @@ import productsRoute from './routers/productsRoute.js';
 dotenv.config(); 
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 7000;
 
 // Database Connection
 dbConnect(process.env.DBURL, process.env.DBNAME);

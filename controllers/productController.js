@@ -81,18 +81,47 @@ export const getAllProducts = async (req, res) => {
 
 
 
+// export const updateProduct = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         const updateData = req.body;
+
+//         const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true });
+
+//         if (!updatedProduct) {
+//             return res.status(404).json({ success: false, message: "Product not found!" });
+//         }
+
+//         res.status(200).json({ success: true, message: "Product updated!", data: updatedProduct });
+//     } catch (error) {
+//         console.error("Update Product Error:", error);
+//         res.status(500).json({ success: false, message: "Server Error" });
+//     }
+// };
+
+
+
+
 export const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
         const updateData = req.body;
 
-        const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true });
-
-        if (!updatedProduct) {
-            return res.status(404).json({ success: false, message: "Product not found!" });
+        // ✅ Check if product exists
+        const existingProduct = await Product.findById(id);
+        if (!existingProduct) {
+            return res.status(404).json({ success: false, message: "Product not found" });
         }
 
-        res.status(200).json({ success: true, message: "Product updated!", data: updatedProduct });
+        // ✅ Update the product safely with `{ new: true }`
+        const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true });
+
+        // ✅ If update fails, return proper message
+        if (!updatedProduct) {
+            return res.status(400).json({ success: false, message: "Product update failed!" });
+        }
+
+        res.status(200).json({ success: true, message: "Product updated successfully", data: updatedProduct });
     } catch (error) {
         console.error("Update Product Error:", error);
         res.status(500).json({ success: false, message: "Server Error" });
