@@ -27,73 +27,27 @@ export const createProduct = async (req, res) => {
 
 
 
-// export const getAllProducts = async (req, res) => {
-//     try {
-//         console.log("Fetching products..."); // 👈 Debug log
-//         const products = await Product.find();
-//         console.log("Products Fetched:", products); // 👈 Data print 
-
-//         res.status(200).json(products);
-//     } catch (error) {
-//         console.error("Error fetching products:", error);
-//         res.status(500).json({ message: "Error fetching products" });
-//     }
-// };
-
-
-
-
-// export const getProductById = async (req, res) => {
-//     try {
-//         const { id } = req.params;
-
-//         // 🛑 Validate MongoDB ID
-//         if (!mongoose.Types.ObjectId.isValid(id)) {
-//             return res.status(400).json({ success: false, message: "Invalid Product ID" });
-//         }
-
-//         const product = await Product.findById(id);
-
-//         if (!product) {
-//             return res.status(404).json({ success: false, message: "Product not found in the database." });
-//         }
-
-//         res.status(200).json({ success: true, data: product });
-//     } catch (error) {
-//         console.error("Error fetching product:", error);
-//         res.status(500).json({ success: false, message: "Internal Server Error" });
-//     }
-// };
-
-
-export const getProductById = async (req, res) => {
-    try {
-        console.log("Request received for ID:", req.params.id); // Debugging
-        const product = await Product.findById(req.params.id);
-        if (!product) {
-            console.log("Product not found for ID:", req.params.id);
-            return res.status(404).json({ message: "Product not found" });
-        }
-        res.json({ success: true, data: product });
-    } catch (error) {
-        console.error("Error fetching product:", error);
-        res.status(500).json({ message: "Server error" });
-    }
-};
-
-
-
-
-
 export const getAllProducts = async (req, res) => {
     try {
+        console.log("Fetching products..."); // 👈 Debug log
         const products = await Product.find();
-        res.status(200).json({ success: true, data: products });
+        console.log("Products Fetched:", products); // 👈 Data print 
+
+        res.status(200).json(products);
     } catch (error) {
         console.error("Error fetching products:", error);
-        res.status(500).json({ success: false, message: "Error fetching products" });
+        res.status(500).json({ message: "Error fetching products" });
     }
 };
+
+
+
+
+
+
+
+
+
 
 
 
