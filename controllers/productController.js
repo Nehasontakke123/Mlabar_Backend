@@ -48,10 +48,34 @@ export const getAllProducts = async (req, res) => {
 
 
 
+// export const getProductsByCategory = async (req, res) => {
+//     try {
+//         const { category } = req.params;
+//         console.log("Fetching products for category:", category);
+
+//         const products = await Product.find({ category });
+
+//         if (!products.length) {
+//             return res.status(404).json({ success: false, message: "No products found for this category" });
+//         }
+
+//         res.status(200).json({ success: true, data: products });
+//     } catch (error) {
+//         console.error("Error fetching products by category:", error);
+//         res.status(500).json({ success: false, message: "Server Error" });
+//     }
+// };
+
+
+
 export const getProductsByCategory = async (req, res) => {
     try {
         const { category } = req.params;
         console.log("Fetching products for category:", category);
+
+        if (!category) {
+            return res.status(400).json({ success: false, message: "Category is required" });
+        }
 
         const products = await Product.find({ category });
 
@@ -65,7 +89,6 @@ export const getProductsByCategory = async (req, res) => {
         res.status(500).json({ success: false, message: "Server Error" });
     }
 };
-
 
 
 
