@@ -48,26 +48,56 @@ export const getAllProducts = async (req, res) => {
 
 
 
+// export const updateProduct = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+//         let updateData = req.body;
+
+//         // 🔹 Ensure productCode is NOT updated (to avoid duplicate key error)
+//         delete updateData.productCode;
+
+//         // ✅ Check if product exists
+//         const existingProduct = await Product.findById(id);
+//         if (!existingProduct) {
+//             return res.status(404).json({ success: false, message: "Product not found" });
+//         }
+
+//         // ✅ Update the product safely
+//         const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true });
+
+//         if (!updatedProduct) {
+//             return res.status(400).json({ success: false, message: "Product update failed!" });
+//         }
+
+//         res.status(200).json({ success: true, message: "Product updated successfully", data: updatedProduct });
+//     } catch (error) {
+//         console.error("Update Product Error:", error);
+//         res.status(500).json({ success: false, message: "Server Error", error: error.message });
+//     }
+// };
+
+
+
+
+
 export const updateProduct = async (req, res) => {
     try {
         const { id } = req.params;
-        let updateData = req.body;
 
-        // 🔹 Ensure productCode is NOT updated (to avoid duplicate key error)
+        // ✅ Check if ID is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ success: false, message: "Invalid Product ID" });
+        }
+
+        let updateData = req.body;
         delete updateData.productCode;
 
-        // ✅ Check if product exists
         const existingProduct = await Product.findById(id);
         if (!existingProduct) {
             return res.status(404).json({ success: false, message: "Product not found" });
         }
 
-        // ✅ Update the product safely
         const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true });
-
-        if (!updatedProduct) {
-            return res.status(400).json({ success: false, message: "Product update failed!" });
-        }
 
         res.status(200).json({ success: true, message: "Product updated successfully", data: updatedProduct });
     } catch (error) {
@@ -83,13 +113,38 @@ export const updateProduct = async (req, res) => {
 
 
 
+// export const deleteProduct = async (req, res) => {
+//     try {
+//         const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+//         res.status(200).json({ success: true, message: "Product deleted successfully" });
+//     } catch (error) {
+//         res.status(500).json({ success: false, message: "Server Error" });
+//     }
+// };
+
+
+
+
 
 
 export const deleteProduct = async (req, res) => {
     try {
-        const deletedProduct = await Product.findByIdAndDelete(req.params.id);
+        const { id } = req.params;
+
+        // ✅ Check if ID is a valid ObjectId
+        if (!mongoose.Types.ObjectId.isValid(id)) {
+            return res.status(400).json({ success: false, message: "Invalid Product ID" });
+        }
+
+        const deletedProduct = await Product.findByIdAndDelete(id);
+        if (!deletedProduct) {
+            return res.status(404).json({ success: false, message: "Product not found" });
+        }
+
         res.status(200).json({ success: true, message: "Product deleted successfully" });
     } catch (error) {
+        console.error("Delete Product Error:", error);
         res.status(500).json({ success: false, message: "Server Error" });
     }
 };
+
