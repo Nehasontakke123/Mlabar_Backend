@@ -44,7 +44,7 @@
 import express from "express";
 import multer from "multer";
 import path from "path";
-import { createProduct, getAllProducts, updateProduct, deleteProduct } from "../controllers/productController.js";
+import { createProduct, getAllProducts, updateProduct, deleteProduct,getProductById } from "../controllers/productController.js";
 
 const router = express.Router();
 
@@ -58,5 +58,6 @@ router.post("/", upload.array("images", 5), createProduct);
 router.get("/", getAllProducts);
 router.put("/:id", upload.array("images", 5), updateProduct);
 router.delete("/:id", deleteProduct);
+router.get("/:id", getProductById);
 
 export default router;
