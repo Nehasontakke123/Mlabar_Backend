@@ -43,27 +43,44 @@ export const createProduct = async (req, res) => {
 
 
 
+// export const getProductById = async (req, res) => {
+//     try {
+//         const { id } = req.params;
+
+//         // 🛑 Validate MongoDB ID
+//         if (!mongoose.Types.ObjectId.isValid(id)) {
+//             return res.status(400).json({ success: false, message: "Invalid Product ID" });
+//         }
+
+//         const product = await Product.findById(id);
+
+//         if (!product) {
+//             return res.status(404).json({ success: false, message: "Product not found in the database." });
+//         }
+
+//         res.status(200).json({ success: true, data: product });
+//     } catch (error) {
+//         console.error("Error fetching product:", error);
+//         res.status(500).json({ success: false, message: "Internal Server Error" });
+//     }
+// };
+
+
 export const getProductById = async (req, res) => {
     try {
-        const { id } = req.params;
-
-        // 🛑 Validate MongoDB ID
-        if (!mongoose.Types.ObjectId.isValid(id)) {
-            return res.status(400).json({ success: false, message: "Invalid Product ID" });
-        }
-
-        const product = await Product.findById(id);
-
+        console.log("Request received for ID:", req.params.id); // Debugging
+        const product = await Product.findById(req.params.id);
         if (!product) {
-            return res.status(404).json({ success: false, message: "Product not found in the database." });
+            console.log("Product not found for ID:", req.params.id);
+            return res.status(404).json({ message: "Product not found" });
         }
-
-        res.status(200).json({ success: true, data: product });
+        res.json({ success: true, data: product });
     } catch (error) {
         console.error("Error fetching product:", error);
-        res.status(500).json({ success: false, message: "Internal Server Error" });
+        res.status(500).json({ message: "Server error" });
     }
 };
+
 
 
 
