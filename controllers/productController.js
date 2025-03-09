@@ -43,6 +43,33 @@ export const getAllProducts = async (req, res) => {
 
 
 
+
+
+
+
+
+export const getProductsByCategory = async (req, res) => {
+    try {
+        const { category } = req.params;
+        console.log("Fetching products for category:", category);
+
+        const products = await Product.find({ category });
+
+        if (!products.length) {
+            return res.status(404).json({ success: false, message: "No products found for this category" });
+        }
+
+        res.status(200).json({ success: true, data: products });
+    } catch (error) {
+        console.error("Error fetching products by category:", error);
+        res.status(500).json({ success: false, message: "Server Error" });
+    }
+};
+
+
+
+
+
 export const getProductById = async (req, res) => {
     try {
         const { id } = req.params;
@@ -59,42 +86,6 @@ export const getProductById = async (req, res) => {
         res.status(500).json({ success: false, message: "Server Error" });
     }
 };
-
-
-
-
-
-
-
-
-// export const updateProduct = async (req, res) => {
-//     try {
-//         const { id } = req.params;
-//         let updateData = req.body;
-
-//         // 🔹 Ensure productCode is NOT updated (to avoid duplicate key error)
-//         delete updateData.productCode;
-
-//         // ✅ Check if product exists
-//         const existingProduct = await Product.findById(id);
-//         if (!existingProduct) {
-//             return res.status(404).json({ success: false, message: "Product not found" });
-//         }
-
-//         // ✅ Update the product safely
-//         const updatedProduct = await Product.findByIdAndUpdate(id, updateData, { new: true });
-
-//         if (!updatedProduct) {
-//             return res.status(400).json({ success: false, message: "Product update failed!" });
-//         }
-
-//         res.status(200).json({ success: true, message: "Product updated successfully", data: updatedProduct });
-//     } catch (error) {
-//         console.error("Update Product Error:", error);
-//         res.status(500).json({ success: false, message: "Server Error", error: error.message });
-//     }
-// };
-
 
 
 
