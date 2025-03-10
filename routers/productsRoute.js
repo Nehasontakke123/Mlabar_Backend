@@ -13,12 +13,12 @@ const storage = multer.diskStorage({
 const upload = multer({ storage });
 
 router.post("/", upload.array("images", 5), createProduct);
-router.get("/category/:category", getProductsByCategory);
+// router.get("/category/:category", getProductsByCategory);
 router.get("/", getAllProducts);
 router.get("/:id", getProductById);
 router.put("/:id", upload.array("images", 5), updateProduct);
 router.delete("/:id", deleteProduct);
-// router.get("/category/:category", getProductsByCategory);
+router.get("/category/:category", getProductsByCategory);
 
 
 export default router;
