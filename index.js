@@ -3,6 +3,7 @@ import cors from 'cors';
 import dotenv from 'dotenv';
 import dbConnect from './db/connection.js';
 import productsRoute from './routers/productsRoute.js';
+import authRoute from "./routers/authRoute.js";
 
 dotenv.config(); 
 
@@ -19,7 +20,7 @@ app.use("/uploads", express.static("uploads"));
 
 // Routes
 app.use('/product', productsRoute);
-
+app.use("/api/auth", authRoute);
 app.listen(port, () => {
     console.log(`Server started at port ${port}`);
 });
