@@ -1,4 +1,4 @@
-import userModel from "../models/userModel.js";
+import userModel from "../models/User.js";
 
 export let getUser=async(email)=>{
     try {
