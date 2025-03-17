@@ -4,22 +4,36 @@ import { getToken,verifyToken } from "../auth/jwtToken.js";
 
 
 
-export let getProfile=async(req,res)=>{
-    let email=req.params.email
-    let token=req.headers.authorization.split(" ")[1]
-    console.log(token)
-    try {
-        let flag=verifyToken(token,email)
-        if(flag){
-            let user=await getUser(email)
-        let data={name:user.name,email:user.email,mobile:user.mobile}
-        res.status(200).json(data)
-        }
-        
-    } catch (error) {
-        res.status(500).send("error occured")
+export let getProfile = async (req, res) => {
+    console.log("Headers received:", req.headers); // 🔍 Debugging
+
+    if (!req.headers.authorization) {
+        return res.status(401).json({ error: "Unauthorized: No token provided" });
     }
-}
+
+    let tokenParts = req.headers.authorization.split(" ");
+    if (tokenParts.length !== 2 || tokenParts[0] !== "Bearer") {
+        return res.status(400).json({ error: "Invalid token format. Use 'Bearer token'" });
+    }
+
+    let token = tokenParts[1];
+
+    try {
+        let flag = verifyToken(token, req.params.email);
+        if (flag) {
+            let user = await getUser(req.params.email);
+            let data = { name: user.name, email: user.email, mobile: user.mobile };
+            res.status(200).json(data);
+        } else {
+            res.status(403).json({ error: "Forbidden: Invalid token" });
+        }
+    } catch (error) {
+        console.error("Error in getProfile:", error);
+        res.status(500).json({ error: "Internal Server Error" });
+    }
+};
+
+
 
 
 export let userLogin = async (req, res) => {

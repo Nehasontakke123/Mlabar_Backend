@@ -1,14 +1,14 @@
 import jwt from 'jsonwebtoken'
 
 export let getToken=(payload)=>{
-    let token=jwt.sign(payload,process.env.PRIVATEKEY)
+    let token=jwt.sign(payload,process.env.JWT_SECRET)
     console.log(token);
     return token
 }
 
 export const verifyToken=async(token,email)=>{
   try {
-    let payload=await jwt.verify(token,process.env.PRIVATEKEY)
+    let payload=await jwt.verify(token,process.env.JWT_SECRET)
     console.log(`pay load is ${payload.email}`);
     if(payload.email==email){
         return true
