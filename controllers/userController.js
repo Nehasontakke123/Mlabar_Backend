@@ -22,26 +22,32 @@ export let getProfile=async(req,res)=>{
 }
 
 
-export let userLogin=async(req,res)=>{
-    let {email,password}=req.body
+export let userLogin = async (req, res) => {
+    let { email, password } = req.body;
+
     try {
-        let user=await getUser(email)
-        let flag=await validatePassword(password,user.password)
-        if(flag){
-            let token = getToken({email})
-            let resData={token,"msg":"user login successfully"}
-            // res.status(200).send("user login successfully")
-            res.status(200).json(resData)
+        let user = await getUser(email);
+
+        // Check if user exists
+        if (!user) {
+            return res.status(400).json({ msg: "User not found" });
         }
-        else{
-            res.status(400).send("user login failed")
+
+        let flag = await validatePassword(password, user.password);
+
+        if (flag) {
+            let token = getToken({ email });
+            let resData = { token, msg: "User login successfully" };
+            res.status(200).json(resData);
+        } else {
+            res.status(400).json({ msg: "Invalid password" });
         }
     } catch (error) {
-        res.status(500).send("error in catch block")
-        
+        console.error("Error in userLogin:", error);
+        res.status(500).json({ msg: "Internal server error" });
     }
+};
 
-}
 
 
 export let register=async(req,res)=>{
