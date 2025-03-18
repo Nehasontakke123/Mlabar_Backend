@@ -27,8 +27,8 @@ const dbConnect = async (DBURL, DBNAME) => {
     console.log("Connecting to DB:", DBURL, DBNAME); // Debugging
     await mongoose.connect(DBURL, {
       dbName: DBNAME,
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
+      // useNewUrlParser: true,
+      // useUnifiedTopology: true,
     });
     console.log("Database connected successfully!");
   } catch (error) {

@@ -1,11 +1,15 @@
+import dotenv from 'dotenv';
+dotenv.config();
+
+console.log("JWT_SECRET:", process.env.JWT_SECRET);  
 import express from 'express';
 import cors from 'cors';
-import dotenv from 'dotenv';
+// import dotenv from 'dotenv';
 import dbConnect from './db/connection.js';
 import productsRoute from './routers/productsRoute.js';
 import authRoute from "./routers/authRoute.js";
 
-dotenv.config(); 
+// dotenv.config(); 
 
 const app = express();
 const port = process.env.PORT || 5000;
