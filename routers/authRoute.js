@@ -1,11 +1,10 @@
-import express from "express";
-import { register, login, getAllUsers } from "../controllers/authController.js";
+import express from 'express';
+import { registerUser, loginUser, getAllUsers } from '../controllers/authController.js';
 
-const router = express.Router(); // Correct way to create a router
+const router = express.Router();
 
-router.post("/register", register);
-router.post("/login", login);
-router.get("/users", getAllUsers); // Get all users
+router.post('/register', registerUser);
+router.post('/login', loginUser);
+router.get('/users', getAllUsers);  // ✅ Get all users
 
-export default router; // ✅ Ensure this is `export default router;`
-
+export default router;
