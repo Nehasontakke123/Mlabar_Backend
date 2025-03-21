@@ -25,8 +25,6 @@ export const createProduct = async (req, res) => {
 
 
 
-
-
 export const getAllProducts = async (req, res) => {
     try {
         console.log("Fetching products..."); // 👈 Debug log
@@ -39,63 +37,6 @@ export const getAllProducts = async (req, res) => {
         res.status(500).json({ message: "Error fetching products" });
     }
 };
-
-
-
-
-// export const getProductsByCategory = async (req, res) => {
-//     try {
-//         const { category } = req.params;
-//         console.log("Fetching products for category:", category); // ✅ Debugging log
-
-//         if (!category) {
-//             return res.status(400).json({ success: false, message: "Category is required" });
-//         }
-
-//         const products = await Product.find({ category: { $regex: new RegExp(category, "i") } });
-//         console.log("Fetched Products:", products); // ✅ Products console.log() करा
-
-//         if (!products.length) {
-//             console.log("No products found for category:", category); // ✅ Logs verify करा
-//             return res.status(404).json({ success: false, message: "No products found for this category" });
-//         }
-
-//         res.status(200).json({ success: true, data: products });
-//     } catch (error) {
-//         console.error("Error fetching products by category:", error);
-//         res.status(500).json({ success: false, message: "Server Error" });
-//     }
-// };
-
-
-
-
-// export const getProductsByCategory = async (req, res) => {
-//     try {
-//         const category = req.params.category?.trim(); // Remove extra spaces
-//         console.log("📌 Fetching products for category:", category);
-
-//         if (!category) {
-//             return res.status(400).json({ success: false, message: "Category is required" });
-//         }
-
-//         // Fetch products with case-insensitive match
-//         const products = await Product.find({ category: { $regex: `^${category}$`, $options: "i" } });
-
-//         if (products.length === 0) {
-//             console.log("⚠️ No products found for category:", category);
-//             return res.status(404).json({ success: false, message: `No products found for '${category}'` });
-//         }
-
-//         console.log(`✅ ${products.length} Products fetched for category: ${category}`);
-//         res.status(200).json({ success: true, data: products });
-//     } catch (error) {
-//         console.error("❌ Error fetching products:", error.message);
-//         res.status(500).json({ success: false, message: "Internal Server Error" });
-//     }
-// };
-
-
 
 
 
